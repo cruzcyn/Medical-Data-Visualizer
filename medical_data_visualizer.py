@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Import data
-df = None
+df = pd.read_csv("medical_examination.csv")
 
 # TODO Clean the data. Filter out the following patient segments that represent
 # incorrect data:
