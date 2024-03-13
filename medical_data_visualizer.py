@@ -24,10 +24,10 @@ df = df[(df.weight > weight_low_percentile) & (df.weight < weight_high_percentil
 bmi_calc = round(df.weight/(df.height**2), 1)
 df['overweight'] = np.where(bmi_calc > 25, 1, 0)
 
-# TODO Normalize data by making 0 always good and 1 always bad. 
-# If the value of 'cholesterol' or 'gluc' is 1, make the value 0. 
-# If the value is more than 1, make the value 1.
-
+# NORMALIZE DATA by making 0 always good and 1 always bad.
+bad_categories = ["cholesterol", "gluc", "smoke", "alco"]
+for cat in bad_categories:
+    df[cat] = np.where(df[cat] <= 1, 0, 1)
 
 # Draw Categorical Plot
 # TODO Convert data into long format and create a chart that shows the value counts
