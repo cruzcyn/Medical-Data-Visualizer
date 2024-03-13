@@ -29,6 +29,10 @@ bad_categories = ["cholesterol", "gluc", "smoke", "alco"]
 for cat in bad_categories:
     df[cat] = np.where(df[cat] <= 1, 0, 1)
 
+good_categories = ["active", "cardio"]
+for cat in good_categories:
+    df[cat] = np.where(df[cat] == 1, 0, 1)
+
 # Draw Categorical Plot
 # TODO Convert data into long format and create a chart that shows the value counts
 # of the categorical features (so, what's written in the next comment) using seaborn's
