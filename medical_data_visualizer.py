@@ -21,43 +21,24 @@ df = df[(df.weight > weight_low_percentile) & (df.weight < weight_high_percentil
 
 
 # ADD OVERWEIGHT COLUMN
-bmi_calc = round(df.weight/(df.height**2), 1)
+# The height in the df is given in cm amd the formula for the bmi calculation requires for it to be in m.
+bmi_calc = round(df.weight/((df.height/100)**2), 1)
 df['overweight'] = np.where(bmi_calc > 25, 1, 0)
 
 # NORMALIZE DATA by making 0 always good and 1 always bad.
-bad_categories = ["cholesterol", "gluc", "smoke", "alco"]
+bad_categories = ["cholesterol", "gluc"]
 for cat in bad_categories:
-    df[cat] = np.where(df[cat] <= 1, 0, 1)
-
-good_categories = ["active", "cardio"]
-for cat in good_categories:
     df[cat] = np.where(df[cat] == 1, 0, 1)
 
+
 # Draw Categorical Plot
-# TODO Convert data into long format and create a chart that shows the value counts
-# of the categorical features (so, what's written in the next comment) using seaborn's
-# catplot().
-# The dataset should be split by "Cardio" so there is one chart for each "cardio" value.
-# This chart should look like the one in examples/Figure_1.png
 
 def draw_cat_plot():
-    # Create DataFrame for cat plot using `pd.melt` using just the values from 
-    #'cholesterol', 'gluc', 'smoke', 'alco', 'active', and 'overweight'.
-    df_cat = None
-
-
-    # Group and reformat the data to split it by 'cardio'. Show the counts of each 
-    # feature. You will have to rename one of the columns for the catplot to work 
-    # correctly.
-    df_cat = None
-    
-
-    # Draw the catplot with 'sns.catplot()'
-
-
+    # Convert the data into long format
+    df_cat = pd.melt(df, id_vars=["cardio"], value_vars=["active", "alco", "cholesterol", "gluc", "overweight", "smoke"])
 
     # Get the figure for the output
-    fig = None
+    fig = sns.catplot(data=df_cat, kind="count",  x="variable", hue="value", col="cardio")
 
 
     # Do not modify the next two lines
