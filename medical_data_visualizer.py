@@ -6,12 +6,18 @@ import numpy as np
 # Import data
 df = pd.read_csv("medical_examination.csv")
 
-# TODO Clean the data. Filter out the following patient segments that represent
-# incorrect data:
-# diastolic pressure > systolic (keep correct data w: "(df['ap_lo'] <= df['ap_hi'])")
+# TODO Clean the data. Filter out the following patient segments that represent incorrect data:
+# where diastolic pressure > systolic pressure
+df = df[df["ap_lo"] <= df["ap_hi"]]
+
 # height > 97.5th percentile
-# weight < 2.5th percentile
-# weight > 97.5th percentile
+height_percentile = np.percentile(df.height, 97.5)
+df = df[df.height < height_percentile]
+
+# weight < 2.5th percentile and  weight > 97.5th percentile
+weight_low_percentile = np.percentile(df.weight, 2.5)
+weight_high_percentile = np.percentile(df.weight, 97.5)
+df = df[(df.weight > weight_low_percentile) & (df.weight < weight_high_percentile)]
 
 
 # TODO Add 'overweight' column. Calculate BMI (weight/height**2 in meters)
