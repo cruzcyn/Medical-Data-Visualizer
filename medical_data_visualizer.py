@@ -3,10 +3,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Import data
+# IMPORT DATA
 df = pd.read_csv("medical_examination.csv")
 
-# TODO Clean the data. Filter out the following patient segments that represent incorrect data:
+# CLEAN THE DATA. Filter out the following patient segments that represent incorrect data:
 # where diastolic pressure > systolic pressure
 df = df[df["ap_lo"] <= df["ap_hi"]]
 
@@ -20,9 +20,9 @@ weight_high_percentile = np.percentile(df.weight, 97.5)
 df = df[(df.weight > weight_low_percentile) & (df.weight < weight_high_percentile)]
 
 
-# TODO Add 'overweight' column. Calculate BMI (weight/height**2 in meters)
-# If BMI > 25, then overweight = 1 (so, yes), else overweight = 0
-df['overweight'] = None
+# ADD OVERWEIGHT COLUMN
+bmi_calc = round(df.weight/(df.height**2), 1)
+df['overweight'] = np.where(bmi_calc > 25, 1, 0)
 
 # TODO Normalize data by making 0 always good and 1 always bad. 
 # If the value of 'cholesterol' or 'gluc' is 1, make the value 0. 
