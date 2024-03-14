@@ -52,21 +52,21 @@ def draw_cat_plot():
 
 def draw_heat_map():
     # Clean the data
-    df_heat = None
+    # Setting df_heat as df as I had already cleaned the data with the filters requested
+    df_heat = df
 
     # Calculate the correlation matrix
-    corr = None
+    corr = df_heat.corr(method="pearson")
 
     # Generate a mask for the upper triangle
-    mask = None
-
-
+    mask = np.triu(np.ones_like(corr, dtype=bool))
 
     # Set up the matplotlib figure
-    fig, ax = None
+    fig, ax = plt.subplots(figsize=(12, 12))
 
     # Draw the heatmap with 'sns.heatmap()'
-
+    sns.heatmap(corr, cmap="icefire", annot=True, fmt='0.1f', linewidths=1, 
+                mask=mask, square=True)
 
 
     # Do not modify the next two lines
