@@ -6,23 +6,16 @@ import numpy as np
 # IMPORT DATA
 df = pd.read_csv("medical_examination.csv")
 
-# CLEAN THE DATA. Filter out the following patient segments that represent incorrect data:
-# where diastolic pressure > systolic pressure
-df = df[df["ap_lo"] <= df["ap_hi"]]
-
-# height > 97.5th percentile
-height_percentile = np.percentile(df.height, 97.5)
-df = df[df.height < height_percentile]
-
-# weight < 2.5th percentile and  weight > 97.5th percentile
-weight_low_percentile = np.percentile(df.weight, 2.5)
-weight_high_percentile = np.percentile(df.weight, 97.5)
-df = df[(df.weight > weight_low_percentile) & (df.weight < weight_high_percentile)]
-
+# CLEAN THE DATA
+df = df[(df["ap_lo"] <= df["ap_hi"]) & 
+        (df["height"] >= (df["height"].quantile(0.025))) &
+        (df["height"] <= (df["height"].quantile(0.975))) &
+        (df["weight"] >= (df["weight"].quantile(0.025))) &
+        (df["weight"] <= (df["weight"].quantile(0.975)))]
 
 # ADD OVERWEIGHT COLUMN
 # The height in the df is given in cm amd the formula for the bmi calculation requires for it to be in m.
-bmi_calc = round(df.weight/((df.height/100)**2), 1)
+bmi_calc = df.weight/((df.height/100)**2)
 df['overweight'] = np.where(bmi_calc > 25, 1, 0)
 
 # NORMALIZE DATA by making 0 always good and 1 always bad.
@@ -39,11 +32,11 @@ def draw_cat_plot():
 
     # Get the figure for the output
     fig = sns.catplot(data=df_cat, kind="count",  x="variable", hue="value", col="cardio")
-
+    fig.set_axis_labels("variable", "total")
 
     # Do not modify the next two lines
     fig.savefig('catplot.png')
-    return fig
+    return fig.figure
 
 
 # Draw Heat Map
